@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 public class AddResturentRequest {
     private long id;
-    private String ResturentName;
-    private String Email;
-    private String Password;
+    private String resturentName;
+    private String email;
+    private String password;
     private String phoneNumber;
 }

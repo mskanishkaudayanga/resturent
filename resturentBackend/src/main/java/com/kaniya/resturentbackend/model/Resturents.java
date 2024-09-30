@@ -17,9 +17,9 @@ public class Resturents {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String ResturentName;
-    private String Email;
-    private String Password;
+    private String restaurantName;
+    private String email;
+    private String password;
     private String phoneNumber;
     private String discription;
     private String city;
@@ -31,10 +31,10 @@ public class Resturents {
     @OneToMany(mappedBy = "resturents" ,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menu;
 
-    public Resturents(String resturentName, String email, String password, String phoneNumber) {
-        this.ResturentName = resturentName;
-        this.Email = email;
-        this.Password = password;
+    public Resturents(String restaurantName, String email, String password, String phoneNumber) {
+        this.restaurantName = restaurantName;
+        this.email = email;
+        this.password = password;
         this.phoneNumber = phoneNumber;
 
     }
