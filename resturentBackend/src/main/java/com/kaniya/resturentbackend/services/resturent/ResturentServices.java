@@ -5,25 +5,27 @@ import com.kaniya.resturentbackend.exceptions.ResturentNotFoundExeption;
 import com.kaniya.resturentbackend.model.Resturents;
 import com.kaniya.resturentbackend.repository.ResturentRepository;
 import com.kaniya.resturentbackend.reqest.AddResturentRequest;
+import com.kaniya.resturentbackend.reqest.UpdateResturentRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
+
 @AllArgsConstructor
+@Service
 public class ResturentServices implements  IResturentService{
 
     private  final ResturentRepository resturentRepository;
     @Override
-    public Resturents addResturents(AddResturentRequest resturents) {
-        String resturentName = Optional.ofNullable(resturents.getResturentName())
-                .orElseThrow(()-> new IllegalArgumentException("resturentName is null"));
-        return resturentRepository.save(createResturent(resturents));
+    public Resturents addResturents(AddResturentRequest restaurants) {
+        String restaurentName = Optional.ofNullable(restaurants.getResturentName())
+                .orElseThrow(()-> new IllegalArgumentException("restaurantName is null"));
+        return resturentRepository.save(createRestaurant(restaurants));
     }
 
-    private  Resturents createResturent(AddResturentRequest request) {
+    private  Resturents createRestaurant(AddResturentRequest request) {
         return new Resturents(
                request.getResturentName(),
                 request.getEmail(),
@@ -33,9 +35,18 @@ public class ResturentServices implements  IResturentService{
     }
 
     @Override
-    public Resturents updateResturents(AddResturentRequest resturents, long id) {
-
-        return null;
+    public Resturents updateResturents(UpdateResturentRequest resturents, long id) {
+        return  resturentRepository.findById(id)
+                .map(existingResturent-> updateRestaurant(existingResturent,resturents))
+                .map(resturentRepository::save)
+                .orElseThrow(()-> new ResturentNotFoundExeption("Resturent not found"));
+    }
+    private  Resturents updateRestaurant(Resturents existingRestaurant, UpdateResturentRequest request) {
+        existingRestaurant.setRestaurantName(request.getResturentName());
+        existingRestaurant.setEmail(request.getEmail());
+        existingRestaurant.setPassword(request.getPassword());
+        existingRestaurant.setPhoneNumber(request.getPhoneNumber());
+        return  existingRestaurant;
     }
 
     @Override
@@ -55,5 +66,15 @@ public class ResturentServices implements  IResturentService{
     @Override
     public List<Resturents> getAllResturents() {
         return resturentRepository.findAll();
+    }
+
+    @Override
+    public List<Resturents> getResturentsByName(String name) {
+        return resturentRepository.findByRestaurantName(name);
+    }
+
+    @Override
+    public List<Resturents> getResturentsByCity(String city) {
+        return resturentRepository.findByCity(city);
     }
 }
