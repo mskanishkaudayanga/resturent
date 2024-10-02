@@ -7,13 +7,14 @@ import com.kaniya.resturentbackend.repository.ResturentRepository;
 import com.kaniya.resturentbackend.reqest.AddResturentRequest;
 import com.kaniya.resturentbackend.reqest.UpdateResturentRequest;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class ResturentServices implements  IResturentService{
 

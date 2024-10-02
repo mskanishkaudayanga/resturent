@@ -13,16 +13,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Category {
+public class Items {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String CategoryName;
+    private  long id;
+    private  String itemName;
 
-    @ManyToOne
-    @JoinColumn(name="Menu_is")
-    private Menu menu;
-
-    @OneToMany(mappedBy = "category" ,cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "items" ,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Dishes> dishes;
+
+    public Items(String itemName) {
+        this.itemName = itemName;
+    }
 }

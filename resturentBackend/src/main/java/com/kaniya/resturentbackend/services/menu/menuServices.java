@@ -8,31 +8,34 @@ import com.kaniya.resturentbackend.repository.MenuRepository;
 import com.kaniya.resturentbackend.repository.ResturentRepository;
 import com.kaniya.resturentbackend.reqest.AddMenuRequest;
 import com.kaniya.resturentbackend.reqest.UpdateMenuRequest;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
-@AllArgsConstructor
-public class menuServices implements IMenuServices{
+@RequiredArgsConstructor
+public class MenuServices implements IMenuServices{
 
     private final MenuRepository menuRepository;
     private  final ResturentRepository resturentRepository;
 
     @Override
-    public Menu GetMenuByResturentID(int restaurantID) {
-        return menuRepository.findByRestaurantID(restaurantID);
+    public List<Menu> GetMenuByResturentID(long id) {
+       Resturents resturent= resturentRepository.findById(id).orElseThrow(()-> new ResturentNotFoundExeption("resturent Not Found"));
+        return resturent.getMenu();
+
     }
 
     @Override
     public Menu GetMenuByMenuName(String menuName) {
         return menuRepository.findByMenuName(menuName);
+//        menuRepository.findByMenuName(menuName);
     }
 
     @Override
-    public Menu addMenu(AddMenuRequest request) {
-        Resturents resturents = resturentRepository.findById(request.getRestaurantId())
+    public Menu addMenu(AddMenuRequest request ,long restaurantId) {
+        Resturents resturents = resturentRepository.findById(restaurantId)
                 .orElseThrow(()-> new ResturentNotFoundExeption("restaurant not found"));
 
         Menu menu = new Menu();

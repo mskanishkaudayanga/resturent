@@ -17,7 +17,7 @@ public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String MenuName;
+    private String menuName;
 
 
     @ManyToOne
@@ -25,7 +25,7 @@ public class Menu {
     private Resturents resturents;
 
     @OneToMany(mappedBy = "menu" ,cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Category> category;
+    private List<Dishes> dishes;
 
 
 }

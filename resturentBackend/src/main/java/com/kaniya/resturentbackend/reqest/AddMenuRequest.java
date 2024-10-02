@@ -6,6 +6,4 @@ import lombok.Data;
 @Data
 public class AddMenuRequest {
     private String menuName;
-    private long restaurantId;
-
 }
