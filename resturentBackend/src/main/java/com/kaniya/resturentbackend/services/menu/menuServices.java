@@ -1,14 +1,19 @@
 package com.kaniya.resturentbackend.services.menu;
 
+import com.kaniya.resturentbackend.dto.DishDto;
+import com.kaniya.resturentbackend.dto.MenuDto;
 import com.kaniya.resturentbackend.exceptions.MenuNotFoundExeption;
 import com.kaniya.resturentbackend.exceptions.ResturentNotFoundExeption;
+import com.kaniya.resturentbackend.model.Dishes;
 import com.kaniya.resturentbackend.model.Menu;
 import com.kaniya.resturentbackend.model.Resturents;
+import com.kaniya.resturentbackend.repository.DishRepository;
 import com.kaniya.resturentbackend.repository.MenuRepository;
 import com.kaniya.resturentbackend.repository.ResturentRepository;
 import com.kaniya.resturentbackend.reqest.AddMenuRequest;
 import com.kaniya.resturentbackend.reqest.UpdateMenuRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +24,8 @@ public class MenuServices implements IMenuServices{
 
     private final MenuRepository menuRepository;
     private  final ResturentRepository resturentRepository;
-
+    private  final ModelMapper modelMapper;
+    private final DishRepository dishRepository;
     @Override
     public List<Menu> GetMenuByResturentID(long id) {
        Resturents resturent= resturentRepository.findById(id).orElseThrow(()-> new ResturentNotFoundExeption("resturent Not Found"));
@@ -39,8 +45,10 @@ public class MenuServices implements IMenuServices{
                 .orElseThrow(()-> new ResturentNotFoundExeption("restaurant not found"));
 
         Menu menu = new Menu();
+        System.out.println("resturent find "+resturents);
         menu.setMenuName(request.getMenuName());
         menu.setResturents(resturents);
+        System.out.println("menu" +menu);
         return menuRepository.save(menu);
     }
 
@@ -64,5 +72,20 @@ public class MenuServices implements IMenuServices{
                 ()->{throw new MenuNotFoundExeption("menu not Found");}
         );
 
+    }
+    @Override
+    public List<MenuDto> getAllconvertedMenu(List<Menu> menus) {
+        return menus.stream().map(this::convertToDto).toList();
+
+    }
+    @Override
+    public MenuDto convertToDto(Menu menu){
+        MenuDto menuDto =modelMapper.map(menu,MenuDto.class);
+        List<Dishes> dishes = dishRepository.findByMenuId(menu.getId());
+        List<DishDto> dishDto = dishes.stream()
+                .map(dish->modelMapper.map(dish, DishDto.class))
+                .toList();
+        menuDto.setDishes(dishDto);
+        return menuDto;
     }
 }

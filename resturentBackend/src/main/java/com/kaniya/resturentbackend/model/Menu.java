@@ -1,5 +1,6 @@
 package com.kaniya.resturentbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class Menu {
     private long id;
     private String menuName;
 
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="Resturent_is")
     private Resturents resturents;

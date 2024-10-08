@@ -3,9 +3,11 @@ package com.kaniya.resturentbackend.dto;
 import com.kaniya.resturentbackend.model.Menu;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class ResturentDto {
     private long id;
     private String restaurantName;

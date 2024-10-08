@@ -1,13 +1,17 @@
 package com.kaniya.resturentbackend.services.resturent;
 
 
+import com.kaniya.resturentbackend.dto.MenuDto;
+import com.kaniya.resturentbackend.dto.ResturentDto;
 import com.kaniya.resturentbackend.exceptions.ResturentNotFoundExeption;
+import com.kaniya.resturentbackend.model.Menu;
 import com.kaniya.resturentbackend.model.Resturents;
+import com.kaniya.resturentbackend.repository.MenuRepository;
 import com.kaniya.resturentbackend.repository.ResturentRepository;
 import com.kaniya.resturentbackend.reqest.AddResturentRequest;
 import com.kaniya.resturentbackend.reqest.UpdateResturentRequest;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +23,9 @@ import java.util.Optional;
 public class ResturentServices implements  IResturentService{
 
     private  final ResturentRepository resturentRepository;
+    private final MenuRepository menuRepository;
+    private final ModelMapper modelMapper;
+
     @Override
     public Resturents addResturents(AddResturentRequest restaurants) {
         String restaurentName = Optional.ofNullable(restaurants.getResturentName())
@@ -77,5 +84,22 @@ public class ResturentServices implements  IResturentService{
     @Override
     public List<Resturents> getResturentsByCity(String city) {
         return resturentRepository.findByCity(city);
+    }
+
+    @Override
+    public List<ResturentDto> getConvertedResturents(List<Resturents> resturents){
+       return resturents.stream().map(this::convertToDto).toList();
+    }
+
+
+    @Override
+    public ResturentDto convertToDto(Resturents resturents){
+        ResturentDto  resturentDto =modelMapper.map(resturents,ResturentDto.class);
+        List<Menu> menues =  menuRepository.findByResturentsId(resturents.getId());
+        List<MenuDto> menu = menues.stream()
+                .map(menus->modelMapper.map(menus,MenuDto.class))
+                .toList();
+       resturentDto.setMenu(menu);
+        return resturentDto;
     }
 }

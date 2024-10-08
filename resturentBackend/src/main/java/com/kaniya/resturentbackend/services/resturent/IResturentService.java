@@ -1,5 +1,6 @@
 package com.kaniya.resturentbackend.services.resturent;
 
+import com.kaniya.resturentbackend.dto.ResturentDto;
 import com.kaniya.resturentbackend.model.Resturents;
 import com.kaniya.resturentbackend.reqest.AddResturentRequest;
 import com.kaniya.resturentbackend.reqest.UpdateResturentRequest;
@@ -16,5 +17,7 @@ public interface IResturentService {
     List<Resturents> getResturentsByCity(String city);
 
 
+    List<ResturentDto> getConvertedResturents(List<Resturents> resturents);
 
+    ResturentDto convertToDto(Resturents resturents);
 }

@@ -6,10 +6,7 @@ import com.kaniya.resturentbackend.responce.ApiResponse;
 import com.kaniya.resturentbackend.services.menu.MenuServices;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -20,9 +17,8 @@ public class MenuController {
     private final MenuServices menuServices;
 
     @PostMapping("{restaurantId}/menuAdd")
-    public ResponseEntity<ApiResponse> addMenu(AddMenuRequest request ,@PathVariable long restaurantId) {
+    public ResponseEntity<ApiResponse> addMenu(@RequestBody AddMenuRequest request , @PathVariable long restaurantId) {
         try {
-            System.out.println("Inside Menu");
             Menu menu =menuServices.addMenu(request,restaurantId);
             return  ResponseEntity.ok(new ApiResponse("Menu Added Succefull",menu));
         } catch (Exception e) {

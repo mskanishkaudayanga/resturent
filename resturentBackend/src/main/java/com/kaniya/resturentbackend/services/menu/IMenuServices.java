@@ -1,5 +1,6 @@
 package com.kaniya.resturentbackend.services.menu;
 
+import com.kaniya.resturentbackend.dto.MenuDto;
 import com.kaniya.resturentbackend.model.Menu;
 import com.kaniya.resturentbackend.reqest.AddMenuRequest;
 import com.kaniya.resturentbackend.reqest.UpdateMenuRequest;
@@ -12,4 +13,8 @@ public interface IMenuServices {
     Menu addMenu(AddMenuRequest menu,long resturentId);
     Menu updateMenu(UpdateMenuRequest menu,long id);
     void deleteMenu(long menuID);
+
+    List<MenuDto> getAllconvertedMenu(List<Menu> menus);
+
+    MenuDto convertToDto(Menu menu);
 }

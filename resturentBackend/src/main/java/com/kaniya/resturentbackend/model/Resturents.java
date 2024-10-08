@@ -1,5 +1,6 @@
 package com.kaniya.resturentbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class Resturents {
     private String CloseTime;
     private String openingDays;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "resturents" ,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menu;
 

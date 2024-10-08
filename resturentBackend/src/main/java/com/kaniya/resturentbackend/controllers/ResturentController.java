@@ -1,5 +1,6 @@
 package com.kaniya.resturentbackend.controllers;
 
+import com.kaniya.resturentbackend.dto.ResturentDto;
 import com.kaniya.resturentbackend.exceptions.ResturentNotFoundExeption;
 import com.kaniya.resturentbackend.model.Resturents;
 import com.kaniya.resturentbackend.reqest.AddResturentRequest;
@@ -24,10 +25,13 @@ private final ResturentServices resturentServices;
 
 
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse> getAllResturent() {
+    public ResponseEntity<ApiResponse> getAllRestaurant() {
         try {
+
             List<Resturents> allResturents = resturentServices.getAllResturents();
-            return ResponseEntity.ok(new ApiResponse("Resturents ",allResturents));
+            System.out.println(allResturents);
+            List<ResturentDto> allResturentDto =resturentServices.getConvertedResturents(allResturents);
+            return ResponseEntity.ok(new ApiResponse("Resturents ",allResturentDto));
         } catch (ResturentNotFoundExeption e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Resturents ",e));
         }
@@ -58,7 +62,8 @@ private final ResturentServices resturentServices;
     public  ResponseEntity<ApiResponse> getRestaurantById(@PathVariable long restaurantId) {
         try {
             Resturents restaurant = resturentServices.getResturentsById(restaurantId);
-            return  ResponseEntity.ok(new ApiResponse("Found Restaurant ",restaurant));
+            ResturentDto resturentDto =resturentServices.convertToDto(restaurant);
+            return  ResponseEntity.ok(new ApiResponse("Found Restaurant ",resturentDto));
         } catch (ResturentNotFoundExeption e) {
             return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Not Found Restaurant ",e));
         }
