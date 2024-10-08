@@ -12,6 +12,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @AllArgsConstructor
 @RestController
+@CrossOrigin
 @RequestMapping("${api.prefix}/menu")
 public class MenuController {
     private final MenuServices menuServices;

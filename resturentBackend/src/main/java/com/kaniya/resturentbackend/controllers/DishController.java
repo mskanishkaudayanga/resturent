@@ -15,6 +15,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @AllArgsConstructor
 @RestController
+@CrossOrigin
 @RequestMapping("${api.prefix}/Dishes")
 public class DishController {
 
