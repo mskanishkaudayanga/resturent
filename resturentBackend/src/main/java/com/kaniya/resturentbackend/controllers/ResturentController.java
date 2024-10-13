@@ -24,7 +24,6 @@ public class ResturentController {
 
 private final ResturentServices resturentServices;
 
-
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllRestaurant() {
         try {
