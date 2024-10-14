@@ -28,17 +28,17 @@ public class ResturentServices implements  IResturentService{
 
     @Override
     public Resturents addResturents(AddResturentRequest restaurants) {
-        String restaurentName = Optional.ofNullable(restaurants.getResturentName())
+        String restaurantName = Optional.ofNullable(restaurants.getRestaurantName())
                 .orElseThrow(()-> new IllegalArgumentException("restaurantName is null"));
         return resturentRepository.save(createRestaurant(restaurants));
     }
 
     private  Resturents createRestaurant(AddResturentRequest request) {
         return new Resturents(
-               request.getResturentName(),
+               request.getRestaurantName(),
                 request.getEmail(),
                 request.getPassword(),
-                request.getPhoneNumber()
+                request.getCity()
         );
     }
 

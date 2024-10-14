@@ -39,9 +39,10 @@ private final ResturentServices resturentServices;
 
 
     @PostMapping("/add")
-    public  ResponseEntity<ApiResponse> addResturent(@RequestBody AddResturentRequest resturent) {
+    public  ResponseEntity<ApiResponse> addRestaurant(@RequestBody AddResturentRequest restaurant) {
         try {
-            Resturents resturents=resturentServices.addResturents(resturent);
+            System.out.println("back"+restaurant);
+            Resturents resturents=resturentServices.addResturents(restaurant);
             return ResponseEntity.ok(new ApiResponse("Susses ",resturents));
         } catch (Exception e) {
             return  ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(),null));
