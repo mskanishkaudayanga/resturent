@@ -33,11 +33,11 @@ public class Resturents {
     @OneToMany(mappedBy = "resturents" ,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menu;
 
-    public Resturents(String restaurantName, String email, String password, String phoneNumber) {
+    public Resturents(String restaurantName, String email, String password, String city) {
         this.restaurantName = restaurantName;
         this.email = email;
         this.password = password;
-        this.phoneNumber = phoneNumber;
+        this.city = city;
 
     }
 }
