@@ -50,10 +50,15 @@ public class ResturentServices implements  IResturentService{
                 .orElseThrow(()-> new ResturentNotFoundExeption("Resturent not found"));
     }
     private  Resturents updateRestaurant(Resturents existingRestaurant, UpdateResturentRequest request) {
-        existingRestaurant.setRestaurantName(request.getResturentName());
+        existingRestaurant.setRestaurantName(request.getRestaurantName());
         existingRestaurant.setEmail(request.getEmail());
         existingRestaurant.setPassword(request.getPassword());
         existingRestaurant.setPhoneNumber(request.getPhoneNumber());
+        existingRestaurant.setCity(request.getCity());
+        existingRestaurant.setAddress(request.getAddress());
+        existingRestaurant.setOpenTime(request.getOpenTime());
+        existingRestaurant.setCloseTime(request.getCloseTime());
+        existingRestaurant.setDiscription(request.getDiscription());
         return  existingRestaurant;
     }
 

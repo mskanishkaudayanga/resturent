@@ -52,6 +52,7 @@ private final ResturentServices resturentServices;
     @PutMapping("{restaurantId}/update")
     public ResponseEntity<ApiResponse> updateRestaurant(@RequestBody UpdateResturentRequest resturent, @PathVariable long restaurantId) {
         try {
+            System.out.println("details"+resturent);
             Resturents resturents =resturentServices.updateResturents(resturent,restaurantId);
             return  ResponseEntity.ok(new ApiResponse("Updated ",resturents));
         } catch (ResturentNotFoundExeption e) {

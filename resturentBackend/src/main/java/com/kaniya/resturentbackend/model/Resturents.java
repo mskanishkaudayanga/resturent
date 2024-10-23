@@ -25,8 +25,8 @@ public class Resturents {
     private String discription;
     private String city;
     private String address;
-    private String OpenTime;
-    private String CloseTime;
+    private String openTime;
+    private String closeTime;
     private String openingDays;
 
     @JsonIgnore

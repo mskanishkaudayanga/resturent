@@ -21,6 +21,7 @@ public class MenuController {
     @PostMapping("{restaurantId}/menuAdd")
     public ResponseEntity<ApiResponse> addMenu(@RequestBody AddMenuRequest request , @PathVariable long restaurantId) {
         try {
+            System.out.println("reqeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" + request);
             Menu menu =menuServices.addMenu(request,restaurantId);
             return  ResponseEntity.ok(new ApiResponse("Menu Added Succefull",menu));
         } catch (Exception e) {
