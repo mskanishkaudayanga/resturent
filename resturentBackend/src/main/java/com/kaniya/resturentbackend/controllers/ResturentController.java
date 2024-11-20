@@ -42,7 +42,7 @@ private final ResturentServices resturentServices;
     public  ResponseEntity<ApiResponse> addRestaurant(@RequestBody AddResturentRequest restaurant) {
         try {
             System.out.println("back"+restaurant);
-            Resturents resturents=resturentServices.addResturents(restaurant);
+            Resturents resturents=resturentServices.createUser(restaurant);
             return ResponseEntity.ok(new ApiResponse("Susses ",resturents));
         } catch (Exception e) {
             return  ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(),null));

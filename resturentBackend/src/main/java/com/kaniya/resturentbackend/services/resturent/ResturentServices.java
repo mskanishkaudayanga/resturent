@@ -3,15 +3,18 @@ package com.kaniya.resturentbackend.services.resturent;
 
 import com.kaniya.resturentbackend.dto.MenuDto;
 import com.kaniya.resturentbackend.dto.ResturentDto;
+import com.kaniya.resturentbackend.exceptions.AlreadyExistsException;
 import com.kaniya.resturentbackend.exceptions.ResturentNotFoundExeption;
 import com.kaniya.resturentbackend.model.Menu;
 import com.kaniya.resturentbackend.model.Resturents;
+import com.kaniya.resturentbackend.model.UserRole;
 import com.kaniya.resturentbackend.repository.MenuRepository;
 import com.kaniya.resturentbackend.repository.ResturentRepository;
 import com.kaniya.resturentbackend.reqest.AddResturentRequest;
 import com.kaniya.resturentbackend.reqest.UpdateResturentRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +25,7 @@ import java.util.Optional;
 @Service
 public class ResturentServices implements  IResturentService{
 
+    private final PasswordEncoder passwordEncoder;
     private  final ResturentRepository resturentRepository;
     private final MenuRepository menuRepository;
     private final ModelMapper modelMapper;
@@ -41,6 +45,29 @@ public class ResturentServices implements  IResturentService{
                 request.getCity()
         );
     }
+
+    @Override
+    public Resturents createUser(AddResturentRequest request) {
+        try {
+            System.out.println(passwordEncoder.encode(request.getPassword()));
+            return  Optional.of(request)
+                    .filter(user -> !resturentRepository.existsByEmail(request.getEmail()))
+                    .map(req -> {
+                        Resturents user = new Resturents();
+                        user.setEmail(request.getEmail());
+                        user.setPassword(passwordEncoder.encode(request.getPassword()));
+                        user.setRole(UserRole.USER);
+                        user.setRestaurantName(request.getRestaurantName());
+
+                        return  resturentRepository.save(user);
+                    }).orElseThrow(() -> new AlreadyExistsException("Oops!" +request.getEmail() +" already exists!"));
+        } catch (AlreadyExistsException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
 
     @Override
     public Resturents updateResturents(UpdateResturentRequest resturents, long id) {
