@@ -1,5 +1,6 @@
 package com.kaniya.resturentbackend.controllers;
 
+import com.kaniya.resturentbackend.dto.MenuDto;
 import com.kaniya.resturentbackend.model.Menu;
 import com.kaniya.resturentbackend.reqest.AddMenuRequest;
 import com.kaniya.resturentbackend.responce.ApiResponse;
@@ -8,7 +9,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 
 @AllArgsConstructor
@@ -21,11 +25,21 @@ public class MenuController {
     @PostMapping("{restaurantId}/menuAdd")
     public ResponseEntity<ApiResponse> addMenu(@RequestBody AddMenuRequest request , @PathVariable long restaurantId) {
         try {
-            System.out.println("reqeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" + request);
             Menu menu =menuServices.addMenu(request,restaurantId);
             return  ResponseEntity.ok(new ApiResponse("Menu Added Succefull",menu));
         } catch (Exception e) {
             return  ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(),null));
+        }
+    }
+    @GetMapping("menu/MenuByResturentID")
+    public ResponseEntity<ApiResponse>  getMenuByRestaurantId(@PathVariable long restaurantId) {
+        try {
+            List<Menu> allMenus = menuServices.GetMenuByResturentID(restaurantId);
+            List<MenuDto> allMenusDto = menuServices.getAllconvertedMenu(allMenus);
+            return  ResponseEntity.ok(new ApiResponse("Menu List",allMenusDto));
+        }
+        catch (Exception e) {
+            return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
         }
     }
 }

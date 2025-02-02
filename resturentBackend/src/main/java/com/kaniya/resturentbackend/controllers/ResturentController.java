@@ -27,7 +27,6 @@ private final ResturentServices resturentServices;
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllRestaurant() {
         try {
-
             List<Resturents> allResturents = resturentServices.getAllResturents();
             System.out.println(allResturents);
             List<ResturentDto> allResturentDto =resturentServices.getConvertedResturents(allResturents);
