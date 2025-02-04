@@ -1,8 +1,10 @@
 package com.kaniya.resturentbackend.controllers;
 
 import com.kaniya.resturentbackend.dto.MenuDto;
+import com.kaniya.resturentbackend.exceptions.MenuNotFoundExeption;
 import com.kaniya.resturentbackend.model.Menu;
 import com.kaniya.resturentbackend.reqest.AddMenuRequest;
+import com.kaniya.resturentbackend.reqest.UpdateMenuRequest;
 import com.kaniya.resturentbackend.responce.ApiResponse;
 import com.kaniya.resturentbackend.services.menu.MenuServices;
 import lombok.AllArgsConstructor;
@@ -39,6 +41,16 @@ public class MenuController {
             return  ResponseEntity.ok(new ApiResponse("Menu List",allMenusDto));
         }
         catch (Exception e) {
+            return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
+        }
+    }
+    @GetMapping("menu/MenuByResturentID")
+    public ResponseEntity<ApiResponse>  updateMenuBYMenuID( UpdateMenuRequest request ,Long menuID) {
+        try {
+            Menu updatedMenu = menuServices.updateMenu(request,menuID);
+            return  ResponseEntity.ok(new ApiResponse("Menu List",updatedMenu));
+        }
+        catch (MenuNotFoundExeption e) {
             return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
         }
     }
