@@ -6,6 +6,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -63,6 +64,26 @@ public class JwtUtils {
                  IllegalArgumentException e) {
             throw new JwtException(e.getMessage());
 
+        }
+    }
+
+    public Long getIdFromToken(String token) {
+        try {
+            token = token.replace("Bearer ", ""); // Remove 'Bearer ' prefix if present
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            // Ensure that the "id" claim exists and is of the correct type
+            if (claims.containsKey("id")) {
+                return claims.get("id", Long.class);  // Extract "id" as Long
+            } else {
+                throw new RuntimeException("ID claim not found in the token");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse the token: " + e.getMessage());
         }
     }
 }
