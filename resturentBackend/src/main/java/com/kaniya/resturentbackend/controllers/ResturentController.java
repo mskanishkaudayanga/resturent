@@ -6,22 +6,26 @@ import com.kaniya.resturentbackend.model.Resturents;
 import com.kaniya.resturentbackend.reqest.AddResturentRequest;
 import com.kaniya.resturentbackend.reqest.UpdateResturentRequest;
 import com.kaniya.resturentbackend.responce.ApiResponse;
+import com.kaniya.resturentbackend.security.jwt.JwtUtils;
 import com.kaniya.resturentbackend.services.resturent.ResturentServices;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.kaniya.resturentbackend.security.jwt.JwtUtils.*;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @AllArgsConstructor
 @RestController
 @CrossOrigin
-@RequestMapping("${api.prefix}/resturents")
+@RequestMapping("${api.prefix}/restaurants")
 public class ResturentController {
-
+    @Autowired
+    JwtUtils jwtUtils;
 private final ResturentServices resturentServices;
 
     @GetMapping("/all")
@@ -48,20 +52,22 @@ private final ResturentServices resturentServices;
 
         }
     }
-    @PutMapping("{restaurantId}/update")
-    public ResponseEntity<ApiResponse> updateRestaurant(@RequestBody UpdateResturentRequest resturent, @PathVariable long restaurantId) {
+//    id get by the token decode
+    @PutMapping("/update")
+    public ResponseEntity<ApiResponse> updateRestaurant(@RequestBody UpdateResturentRequest restaurant, @RequestHeader("Authorization") String token) {
         try {
-            System.out.println("details"+resturent);
-            Resturents resturents =resturentServices.updateResturents(resturent,restaurantId);
+            Long restaurantId = jwtUtils.getIdFromToken(token);
+            Resturents resturents =resturentServices.updateResturents(restaurant,restaurantId);
             return  ResponseEntity.ok(new ApiResponse("Updated ",resturents));
         } catch (ResturentNotFoundExeption e) {
            return  ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Resturents ",e));
         }
     }
 
-    @GetMapping("{restaurantId}/restaurant")
-    public  ResponseEntity<ApiResponse> getRestaurantById(@PathVariable long restaurantId) {
+    @GetMapping("/restaurant")
+    public  ResponseEntity<ApiResponse> getRestaurantById(@RequestHeader("Authorization")String token ) {
         try {
+            Long restaurantId = jwtUtils.getIdFromToken(token);
             Resturents restaurant = resturentServices.getResturentsById(restaurantId);
             ResturentDto resturentDto =resturentServices.convertToDto(restaurant);
             return  ResponseEntity.ok(new ApiResponse("Found Restaurant ",resturentDto));
