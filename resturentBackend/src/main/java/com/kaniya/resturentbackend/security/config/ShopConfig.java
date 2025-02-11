@@ -36,7 +36,8 @@ public class ShopConfig {
 
     private static final List<String> SECURED_URLS =
             List.of("/api/v1/resturents/**", "/api/v1/cartItems/**");
-
+    private static  final List<String> RELESE_URLS =
+            List.of("/api/v1/resturents/all", "/api/v1/resturents/add");
 
     @Bean
     public ModelMapper modelMapper() {
@@ -73,7 +74,9 @@ public class ShopConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->auth.requestMatchers(SECURED_URLS.toArray(String[]::new)).authenticated()
+                .authorizeHttpRequests(auth ->auth
+                        .requestMatchers(RELESE_URLS.toArray(String[]::new)).permitAll()
+                        .requestMatchers(SECURED_URLS.toArray(String[]::new)).authenticated()
                         .anyRequest().permitAll());
         http.authenticationProvider(daoAuthenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
